@@ -1,57 +1,60 @@
 #include <iostream>
+#include <cmath>
 using namespace std;
 
-class Vector {
+typedef int* IntPtr;
+class Point {
 public:
-    Vector() : x(0), y(0) {}
-    Vector(float xx) : x(xx), y(0) {}
-    Vector(float xx, float yy) : x(xx), y(yy) {}
-    float getX() const { return x; }
-    float getY() const { return y; }
-    void setX(float xx) { x = xx; }
-    void display() const { cout << x << " " << y << endl; }
-    Vector operator+(const Vector &v) const {
-        return Vector(x + v.x, y + v.y);
-    }
-    Vector operator-() const {
-        return Vector(-x, -y);
-    }
-    Vector operator-(const Vector &v) const {
-        return Vector(x - v.x, y - v.y);
-    }
-private:
-    float x, y;
-};
-class Fruit {
-public:
-    Fruit() : name("bannana"), price(0) {}
-    Fruit(string fname, float fprice) : name(fname), price(fprice) {}
-    float getPrice() const { return price; }
-    bool operator>(const Fruit &f) const {
-        return price > f.price;
-    }
-private:
-    string name;
-    float price;
-};
-int main() {
-    cout << "Hello, World!" << endl;
-    Vector vector1(3, 5), vector2(-1, 4);
+    Point(int x = 0, int y = 0): x(x), y(y) {}
 
-    Vector vector3 = vector1 + vector2;
-    Vector vector4 = vector1 - vector2;
-    Vector vector5 = vector1 + Vector(3);
-    Vector vector6 = vector1 - Vector(3);
-    Vector vector7 = -vector1;
-    vector7.display();
-    vector5.display();
-    vector3.display();
-    vector4.display();
-    (vector1 + vector2).display();
-    Fruit fruit1("apple", 1.49), fruit2("orange", 1.99);
-    Fruit fruit3;
-    if (fruit2 > fruit1) {
-        cout << "orange is more expensive";
+    int getX() const { return x; }
+    int getY() const { return y; }
+
+    void setX(int xVal) { x = xVal; }
+    void setY(int yVal) { y = yVal; }
+
+private:
+    int x, y;
+};
+
+Point* fillPointArray(Point parray[], int size) {
+    for(int i = 0; i < size; i++) {
+        parray[i] = Point(i, pow(i, 2));
     }
+    return parray;
+}
+
+Point* fillPointArray2(Point* ptr, int size) {
+    for(int i = 0; i < size; i++) {
+        ptr[i] = Point(i, pow(i, 3));
+    }
+    return ptr;
+}
+
+int main() {
+    IntPtr ptr1 = new int;
+    *ptr1 = 10;
+    cout << "Address of ptr1: " << ptr1 << endl;
+    cout << "Value at ptr1: " << *ptr1 << endl;
+
+    // Dynamic allocation of Point objects
+    const int N = 5;
+    Point *ptr2 = new Point(5, 1);
+    cout << "Point ptr2: x = " << ptr2->getX() << ", y = " << ptr2->getY() << endl;
+
+    Point parray[N];
+    fillPointArray(parray, N);
+    cout << "Filled Point Array with squares:" << endl;
+    for(int i = 0; i < N; i++) {
+        cout << "Point " << i << ": x = " << parray[i].getX() << ", y = " << parray[i].getY() << endl;
+    }
+
+    fillPointArray2(parray, N);
+    cout << "Filled Point Array with cubes:" << endl;
+    for(int i = 0; i < N; i++) {
+        cout << "Point " << i << ": x = " << parray[i].getX() << ", y = " << parray[i].getY() << endl;
+    }
+    delete ptr1;
+    delete[] ptr2;
     return 0;
 }
